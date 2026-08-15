@@ -1,2 +1,18 @@
-node_modules
 screenshot-cp.md
+
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# env (念のため。今回の設計では使わない見込み)
+.env
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+
+# logs
+*.log
