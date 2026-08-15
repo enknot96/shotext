@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "shotext (local-ocr)",
+  "version": "1.0.0",
+  "description": "スクショ範囲を選択してTesseract.jsでOCRするツール",
+
+  "permissions": ["activeTab", "offscreen", "storage"],
+
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content.ts"]
+    }
+  ],
+
+  "action": {
+    "default_popup": "src/popup/popup.html"
+  },
+
+  "commands": {
+    "take-screenshot": {
+      "suggested_key": { "default": "Alt+Shift+D" },
+      "description": "範囲を選択してOCRする"
+    }
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["worker.min.js", "tesseract-*", "tessdata/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}
