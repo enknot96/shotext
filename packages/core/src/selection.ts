@@ -21,6 +21,24 @@ export function startSelectionOverlay(): Promise<SelectionRect | null> {
     // bodyタグ直下に上記で設定したdivタグを追加。ブラウザが「新しい要素がDOMツリーに追加された」と認識
     document.body.appendChild(overlay);
 
+    // カーソルの見た目を即座に反映させるため、強制的にレイアウト再計算させる
+    overlay.offsetHeight;
+
+    // 選択範囲を可視化する
+    const selectionBox = document.createElement("div");
+    selectionBox.style.position = "fixed";
+    selectionBox.style.border = "2px solid #4da3ff";
+    selectionBox.style.background = "rgba(255, 255, 255, 0.2)";
+    selectionBox.style.display = "none";
+    overlay.appendChild(selectionBox);
+
+    function updateSelectionBox(x1: number, y1: number, x2: number, y2: number) {
+      selectionBox.style.left = `${Math.min(x1, x2)}px`;
+      selectionBox.style.top = `${Math.min(y1, y2)}px`;
+      selectionBox.style.width = `${Math.abs(x2 - x1)}px`;
+      selectionBox.style.height = `${Math.abs(y2 - y1)}px`;
+    }
+
     // ドラッグの開始位置など設定
     let startX = 0;
     let startY = 0;
@@ -31,11 +49,14 @@ export function startSelectionOverlay(): Promise<SelectionRect | null> {
       startX = event.clientX;
       startY = event.clientY;
       isDragging = true;
+      selectionBox.style.display = "block";
+      updateSelectionBox(startX, startY, startX, startY);
     }
 
     // mousemoveが起きた時に実行する処理
     function onMouseMove(event: MouseEvent) {
       if (!isDragging) return;
+      updateSelectionBox(startX, startY, event.clientX, event.clientY);
     }
 
     // mouseupが起きた時に実行する処理
