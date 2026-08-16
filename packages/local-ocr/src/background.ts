@@ -1,3 +1,5 @@
+// Manifest V3の拡張機能は、「拡張機能全体の司令塔」となる、1つのbackground（service worker）を必ず1つ持つ設計
+// manifest.jsonで、"background": { "service_worker": "src/background.ts","type": "module"} と指定
 import type { ExtensionMessage, SelectionRect } from "@shotext/core";
 
 // どのタブがOCRを依頼したかを記録
@@ -19,7 +21,7 @@ async function startSelection() {
   activeTabId = tab.id;
 
   const message: ExtensionMessage = { type: "START_SELECTION" };
-  // 送信元（tab.id）を指定 / 受信側は必要ない
+  // 送信先（tab.id）を指定 / 受信側（content.ts）はどのタブかを気にする必要はない
   chrome.tabs.sendMessage(tab.id, message);
 }
 
@@ -33,6 +35,20 @@ chrome.runtime.onMessage.addListener((message: ExtensionMessage) => {
 });
 
 async function handleSelectionDone(rect: SelectionRect, devicePixelRatio: number) {
+  // スクショが完了した後、画面全体を撮る前に、タブが切り替わっていないか再度確認
+  // 今アクティブなタブをもう一度取得
+  const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (currentTab.id !== activeTabId) {
+    chrome.notifications.create({
+      type: "basic",
+      iconUrl: chrome.runtime.getURL("icons/warning128.png"),
+      title: "スクショOCR",
+      message: "タブが切り替わったため中断しました。もう一度お試しください。",
+    });
+    return;
+  }
+
+  // 画面全体を撮影
   const dataUrl = await chrome.tabs.captureVisibleTab({ format: "png" });
   await ensureOffscreenDocument();
 
