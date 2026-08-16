@@ -19,4 +19,7 @@ export interface OcrResult {
 export type ExtensionMessage =
   | { type: "OCR_SELECTION_DONE"; rect: SelectionRect; devicePixelRatio: number }
   | { type: "COPY_TO_CLIPBOARD"; text: string }
-  | { type: "OCR_ERROR"; message: string };
+  | { type: "START_SELECTION" }
+  | { type: "OCR_ERROR"; message: string }
+  | { type: "RUN_OCR"; dataUrl: string; rect: SelectionRect; devicePixelRatio: number }
+  | { type: "OCR_RESULT"; text: string };
