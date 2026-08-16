@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/prepare-tesseract-assets.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/prepare-tesseract-assets.mjs",
     "build": "vite build"
   },
   "dependencies": {
@@ -12,8 +14,5 @@
     "@tesseract.js-data/jpn": "^1.0.0",
     "tesseract.js": "^7.0.0",
     "tesseract.js-core": "^7.0.0"
-  },
-  "devDependencies": {
-    "vite-plugin-static-copy": "^4.1.1"
   }
 }

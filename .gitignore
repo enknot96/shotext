@@ -6,6 +6,11 @@ node_modules/
 # build output
 dist/
 
+# node_modulesから準備スクリプトでコピーされる、Tesseract.js用の生成物（scripts/prepare-tesseract-assets.mjs参照）
+packages/local-ocr/public/worker.min.js
+packages/local-ocr/public/tesseract-core*.wasm.js
+packages/local-ocr/public/tessdata/
+
 # env (念のため。今回の設計では使わない見込み)
 .env
 .env.local
