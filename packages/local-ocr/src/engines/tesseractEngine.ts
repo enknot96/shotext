@@ -17,7 +17,11 @@ export class TesseractEngine implements OcrEngine {
       workerPath: chrome.runtime.getURL("worker.min.js"),
       corePath: chrome.runtime.getURL("."),
       langPath: chrome.runtime.getURL("tessdata"),
+      workerBlobURL: false,
     });
+
+    // 日本語は単語区切りがないため、デフォルトだと文字ごとに半角スペースが入ることがある
+    await worker.setParameters({ preserve_interword_spaces: "1" });
 
     // 渡されたBlobを画像として解析し、文字を認識するアルゴリズムにかける
     // dataに認識結果が入る

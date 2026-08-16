@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "スクショ範囲を選択してTesseract.jsでOCRするツール",
 
-  "permissions": ["activeTab", "offscreen", "storage", "notifications"],
+  "permissions": ["activeTab", "offscreen", "storage", "notifications", "clipboardWrite"],
 
   "icons": {
     "16": "icons/icon16.png",
