@@ -28,6 +28,9 @@ importers:
       '@shotext/core':
         specifier: workspace:*
         version: link:../core
+      '@tesseract.js-data/eng':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@tesseract.js-data/jpn':
         specifier: ^1.0.0
         version: 1.0.0
@@ -143,6 +146,9 @@ packages:
 
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
+
+  '@tesseract.js-data/eng@1.0.0':
+    resolution: {integrity: sha512-mbTumm6KQPUHyzTPQaF3ObXYnx0SqqfV2nabqFVQBwD6Kl7PhGSLSzOlfFTWy0P3BjghaSKA2W9GB19Jk+ZcTg==}
 
   '@tesseract.js-data/jpn@1.0.0':
     resolution: {integrity: sha512-nUq2xHUjiWE6FRqkvLIIbByLZ39B8qNaBSOnVP4XIKGPKtZ1e0hiRnK7WhPfl8A+Fe7aNE1u/QoXXUym3TbSCA==}
@@ -666,6 +672,8 @@ snapshots:
     optional: true
 
   '@rolldown/pluginutils@1.0.1': {}
+
+  '@tesseract.js-data/eng@1.0.0': {}
 
   '@tesseract.js-data/jpn@1.0.0': {}
 

@@ -12,7 +12,7 @@ export class TesseractEngine implements OcrEngine {
   // ワーカーの作成（wasmコア・辞書データのロード）は重いため、初回のみ行い使い回す
   private async getWorker(): Promise<Worker> {
     if (!this.workerPromise) {
-      this.workerPromise = createWorker("jpn", 1, {
+      this.workerPromise = createWorker("jpn+eng", 1, {
         workerPath: chrome.runtime.getURL("worker.min.js"),
         corePath: chrome.runtime.getURL("."),
         langPath: chrome.runtime.getURL("tessdata"),
