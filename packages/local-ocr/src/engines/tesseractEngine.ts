@@ -1,4 +1,4 @@
-import type { OcrEngine, OcrResult } from "@shotext/core";
+import { joinWrappedLines, type OcrEngine, type OcrResult } from "@shotext/core";
 import { createWorker, type Worker } from "tesseract.js";
 
 // Tesseractを使うOCRエンジンは、
@@ -40,7 +40,7 @@ export class TesseractEngine implements OcrEngine {
     const { data } = await worker.recognize(imageBlob);
 
     return {
-      text: data.text.trim(),
+      text: joinWrappedLines(data.text.trim()),
       elapsedMs: performance.now() - start,
       engineName: this.name,
     };

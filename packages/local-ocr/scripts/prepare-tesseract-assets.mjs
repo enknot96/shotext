@@ -28,8 +28,8 @@ for (const file of readdirSync(coreDir)) {
   }
 }
 
-// 日本語学習データ
+// 日本語学習データ（legacy+LSTM合体版の4.0.0ではなく、LSTM専用の高精度・軽量版を使う）
 copy(
-  join(root, "node_modules/@tesseract.js-data/jpn/4.0.0/jpn.traineddata.gz"),
+  join(root, "node_modules/@tesseract.js-data/jpn/4.0.0_best_int/jpn.traineddata.gz"),
   join(tessdataDir, "jpn.traineddata.gz"),
 );

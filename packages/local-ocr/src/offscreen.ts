@@ -12,6 +12,7 @@ chrome.runtime.onMessage.addListener((message: ExtensionMessage) => {
 async function handleRunOcr(dataUrl: string, rect: SelectionRect, devicePixelRatio: number) {
   const blob = await captureAndCrop(dataUrl, rect, devicePixelRatio);
   const result = await engine.recognize(blob);
+  console.log(`[shotext] OCR完了: ${Math.round(result.elapsedMs)}ms`);
 
   const resultMessage: ExtensionMessage = {
     type: "OCR_RESULT",
