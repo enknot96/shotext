@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener((message: ExtensionMessage) => {
     // OCRで認識されたテキスト（message.text）を、ユーザーのクリップボードにコピーする処理
     navigator.clipboard.writeText(message.text);
     if (lastRect) {
-      showCopyToast(lastRect, "コピーしました！");
+      showCopyToast(lastRect, "Copied!");
     }
   }
 });

@@ -20,10 +20,11 @@ copy(
   join(publicDir, "worker.min.js"),
 );
 
-// 6種類のcoreファイル(*.wasm.js)を全部コピー
+// coreファイル(*.wasm.js)のうち、LSTM専用版だけをコピー
+// このプロジェクトはOEM=1(LSTM_ONLY)固定のため、legacyエンジンを含む版(*-lstm以外)は不要
 const coreDir = join(root, "node_modules/tesseract.js-core");
 for (const file of readdirSync(coreDir)) {
-  if (file.endsWith(".wasm.js")) {
+  if (file.endsWith("-lstm.wasm.js")) {
     copy(join(coreDir, file), join(publicDir, file));
   }
 }
