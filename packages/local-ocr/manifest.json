@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "shotext (local-ocr)",
+  "name": "ショッテキ！- ShoText！",
   "version": "1.0.0",
-  "description": "スクショ範囲を選択してTesseract.jsでOCRするツール",
+  "description": "範囲を選択してOCR、結果をクリップボードにコピー / Select an area, OCR it, and copy the text to your clipboard.",
 
   "permissions": ["activeTab", "offscreen", "storage", "notifications", "clipboardWrite"],
 

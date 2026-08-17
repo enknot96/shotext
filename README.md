@@ -61,7 +61,7 @@ pnpm workspaceによるmonorepo構成です。
 
 ### What is this?
 
-**Shotext** is a Chrome extension that lets you drag-select any area of a web page, automatically runs OCR on it, and copies the recognized text straight to your clipboard.
+**Shotext！** is a Chrome extension that lets you drag-select any area of a web page, automatically runs OCR on it, and copies the recognized text straight to your clipboard.
 
 - OCR runs via [Tesseract.js](https://github.com/naptha/tesseract.js), fully **on-device in the browser**. No image or recognized text is ever sent to any server
 - Supports Japanese and English
