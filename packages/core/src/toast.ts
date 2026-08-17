@@ -11,7 +11,7 @@ export function showCopyToast(rect: SelectionRect, message: string): void {
   toast.style.top = `${rect.y + rect.height + 8}px`;
   toast.style.padding = "6px 12px";
   toast.style.borderRadius = "6px";
-  toast.style.background = "rgba(0, 0, 0, 0.8)";
+  toast.style.background = "#4da3ff";
   toast.style.color = "#fff";
   toast.style.fontSize = "13px";
   toast.style.fontFamily = "sans-serif";
