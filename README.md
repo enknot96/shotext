@@ -8,6 +8,8 @@
 
 ## 日本語
 
+![ショッテキ！](./docs/assets/store-thumbnail-ja.png)
+
 ### これは何？
 
 「ショッテキ！」は、Webページ上の好きな範囲をドラッグで選択すると、その範囲を自動でOCR（文字認識）してテキスト化し、クリップボードにコピーしてくれるChrome拡張機能です。
@@ -58,6 +60,8 @@ pnpm workspaceによるmonorepo構成です。
 ---
 
 ## English
+
+![ShoText!](./docs/assets/store-thumbnail-en.png)
 
 ### What is this?
 
