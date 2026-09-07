@@ -32,9 +32,14 @@ export function startSelectionOverlay(): Promise<SelectionRect | null> {
     selectionBox.style.display = "none";
     overlay.appendChild(selectionBox);
 
+    // ドラッグ中に表示される水色の選択枠（selectionBox）の位置とサイズを更新する処理
     function updateSelectionBox(x1: number, y1: number, x2: number, y2: number) {
+      // onMouseDownで記録するstartX, startY
+      // 2点のうち小さい方を「四角形の左上」として使う
       selectionBox.style.left = `${Math.min(x1, x2)}px`;
       selectionBox.style.top = `${Math.min(y1, y2)}px`;
+      // onMouseMoveで渡ってくるevent.clientX, event.clientY
+      // .abs(...)で、差の絶対値を取ることで、どの方向にドラッグしてもマイナスにならない幅・高さを取得
       selectionBox.style.width = `${Math.abs(x2 - x1)}px`;
       selectionBox.style.height = `${Math.abs(y2 - y1)}px`;
     }
