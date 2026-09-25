@@ -2,9 +2,9 @@
   "manifest_version": 3,
   "name": "ShoText！- ショッテキ！",
   "version": "1.0.1",
-  "description": "Select an area, OCR it, and copy the text to your clipboard. / 範囲を選択してOCR、結果をクリップボードにコピー ",
+  "description": "Select an area on screen and copy its text (OCR).",
 
-  "permissions": ["activeTab", "offscreen", "notifications", "clipboardWrite"],
+  "permissions": ["activeTab", "offscreen", "notifications", "clipboardWrite", "scripting"],
 
   "icons": {
     "16": "icons/icon16.png",
@@ -18,13 +18,6 @@
     "type": "module"
   },
 
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["src/content.ts"]
-    }
-  ],
-
   "action": {
     "default_popup": "src/popup/popup.html"
   },
@@ -32,16 +25,9 @@
   "commands": {
     "take-screenshot": {
       "suggested_key": { "default": "Alt+Shift+D" },
-      "description": "範囲を選択してOCRする"
+      "description": "Select an area to copy text"
     }
   },
-
-  "web_accessible_resources": [
-    {
-      "resources": ["worker.min.js", "tesseract-*", "tessdata/*"],
-      "matches": ["<all_urls>"]
-    }
-  ],
 
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
