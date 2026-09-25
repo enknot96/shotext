@@ -1,4 +1,4 @@
-import { showCopyToast, startSelectionOverlay } from "@shotext/core";
+import { classifyText, formatText, showCopyToast, startSelectionOverlay } from "@shotext/core";
 import type { ExtensionMessage, SelectionRect } from "@shotext/core";
 
 // トースト表示位置を決めるため、直近の選択範囲を覚えておく
@@ -8,9 +8,11 @@ chrome.runtime.onMessage.addListener((message: ExtensionMessage) => {
   if (message.type === "START_SELECTION") {
     handleSelection();
   }
-  if (message.type === "COPY_TO_CLIPBOARD") {
-    // OCRで認識されたテキスト（message.text）を、ユーザーのクリップボードにコピーする処理
-    navigator.clipboard.writeText(message.text);
+  if (message.type === "OCR_RESULT") {
+    // 生テキストのタイプを判定して整形し、ユーザーのクリップボードにコピーする
+    const { output } = message;
+    const text = formatText(output, classifyText(output.rawText));
+    navigator.clipboard.writeText(text);
     if (lastRect) {
       showCopyToast(lastRect, "Copied!");
     }
@@ -25,7 +27,7 @@ async function handleSelection() {
   lastRect = rect;
 
   const message: ExtensionMessage = {
-    type: "OCR_SELECTION_DONE",
+    type: "SELECTION_DONE",
     rect,
     devicePixelRatio: window.devicePixelRatio,
   };

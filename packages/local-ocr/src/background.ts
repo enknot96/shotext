@@ -2,9 +2,6 @@
 // manifest.jsonで、"background": { "service_worker": "src/background.ts","type": "module"} と指定
 import type { ExtensionMessage, SelectionRect } from "@shotext/core";
 
-// どのタブがOCRを依頼したかを記録
-let activeTabId: number | null = null;
-
 chrome.commands.onCommand.addListener((command) => {
   // manifest.jsonで登録済み
   if (command === "take-screenshot") {
@@ -18,27 +15,33 @@ async function startSelection() {
   if (!tab.id) {
     return;
   }
-  activeTabId = tab.id;
 
   const message: ExtensionMessage = { type: "START_SELECTION" };
   // 送信先（tab.id）を指定 / 受信側（content.ts）はどのタブかを気にする必要はない
   chrome.tabs.sendMessage(tab.id, message);
 }
 
-chrome.runtime.onMessage.addListener((message: ExtensionMessage) => {
-  if (message.type === "OCR_SELECTION_DONE") {
-    handleSelectionDone(message.rect, message.devicePixelRatio);
+chrome.runtime.onMessage.addListener((message: ExtensionMessage, sender) => {
+  if (message.type === "SELECTION_DONE") {
+    // どのタブがOCRを依頼したかは、グローバル変数ではなく送信元の情報から取る
+    // service workerは停止されることがあり、グローバル変数の値が消えるため
+    const tabId = sender.tab?.id;
+    if (tabId === undefined) {
+      return;
+    }
+    handleSelectionDone(tabId, message.rect, message.devicePixelRatio);
   }
-  if (message.type === "OCR_RESULT") {
-    handleOcrResult(message.text);
+  // offscreenからの結果は、依頼元のタブへそのまま転送する
+  if (message.type === "OCR_RESULT" || message.type === "OCR_ERROR") {
+    chrome.tabs.sendMessage(message.tabId, message);
   }
 });
 
-async function handleSelectionDone(rect: SelectionRect, devicePixelRatio: number) {
+async function handleSelectionDone(tabId: number, rect: SelectionRect, devicePixelRatio: number) {
   // スクショが完了した後、画面全体を撮る前に、タブが切り替わっていないか再度確認
   // 今アクティブなタブをもう一度取得
   const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (currentTab.id !== activeTabId) {
+  if (currentTab.id !== tabId) {
     chrome.notifications.create({
       type: "basic",
       iconUrl: chrome.runtime.getURL("icons/warning128.png"),
@@ -54,9 +57,12 @@ async function handleSelectionDone(rect: SelectionRect, devicePixelRatio: number
 
   const message: ExtensionMessage = {
     type: "RUN_OCR",
+    tabId,
     dataUrl,
     rect,
     devicePixelRatio,
+    // offscreenではchrome.i18nが使えないため、UIの言語はここで取得して渡す
+    uiLanguage: chrome.i18n.getUILanguage(),
   };
   chrome.runtime.sendMessage(message);
 }
@@ -71,12 +77,4 @@ async function ensureOffscreenDocument() {
     reasons: ["WORKERS"],
     justification: "Tesseract.jsのWeb WorkerをOCR実行のために動かす",
   });
-}
-
-function handleOcrResult(text: string) {
-  if (!activeTabId) {
-    return;
-  }
-  const message: ExtensionMessage = { type: "COPY_TO_CLIPBOARD", text };
-  chrome.tabs.sendMessage(activeTabId, message);
 }

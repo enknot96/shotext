@@ -1,3 +1,5 @@
+import type { OcrOutput, TextType } from "./types";
+
 // 文末の句読点・記号で終わっていない行は、Webページの折り返しによる見た目の改行とみなして連結する
 const SENTENCE_END_PATTERN = /[。！？!?」』）)"']$/;
 
@@ -24,4 +26,13 @@ export function joinWrappedLines(text: string): string {
   }
 
   return result;
+}
+
+// OCR結果を、判定したタイプに合わせて整形する
+// TODO(v1.1-A): タイプ別の整形ルールを実装する。現時点では文章だけ従来どおり折り返しを連結する
+export function formatText(input: Pick<OcrOutput, "rawText" | "lines">, type: TextType): string {
+  if (type === "prose") {
+    return joinWrappedLines(input.rawText);
+  }
+  return input.rawText;
 }

@@ -1,4 +1,4 @@
-import { joinWrappedLines, type OcrEngine, type OcrResult } from "@shotext/core";
+import type { OcrEngine, OcrOutput } from "@shotext/core";
 import { createWorker, type Worker } from "tesseract.js";
 
 // Tesseractを使うOCRエンジンは、
@@ -28,7 +28,7 @@ export class TesseractEngine implements OcrEngine {
     return this.workerPromise;
   }
 
-  async recognize(imageBlob: Blob): Promise<OcrResult> {
+  async recognize(imageBlob: Blob): Promise<OcrOutput> {
     // 今の時刻をミリ秒単位で取得
     const start = performance.now();
 
@@ -39,8 +39,11 @@ export class TesseractEngine implements OcrEngine {
     // dataに認識結果が入る
     const { data } = await worker.recognize(imageBlob);
 
+    // 整形は、編集パネルでタイプを切り替えて整形し直せるようcontent側で行う。ここでは生テキストを返す
+    // TODO(v1.1-B): インデント推定用に、行ごとの座標（lines）を返す
     return {
-      text: joinWrappedLines(data.text.trim()),
+      rawText: data.text.trim(),
+      lines: [],
       elapsedMs: performance.now() - start,
       engineName: this.name,
     };
