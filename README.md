@@ -1,4 +1,4 @@
-# Shotext！(ショッテキ！)
+# ShoText！- ショッテキ！
 
 A Chrome extension that lets you drag-select any area of the screen and instantly OCRs the text locally, copying it straight to your clipboard.
 

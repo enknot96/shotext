@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ショッテキ！- ShoText！",
-  "version": "1.0.0",
-  "description": "範囲を選択してOCR、結果をクリップボードにコピー / Select an area, OCR it, and copy the text to your clipboard.",
+  "name": "ShoText！- ショッテキ！",
+  "version": "1.0.1",
+  "description": "Select an area, OCR it, and copy the text to your clipboard. / 範囲を選択してOCR、結果をクリップボードにコピー ",
 
   "permissions": ["activeTab", "offscreen", "notifications", "clipboardWrite"],
 
