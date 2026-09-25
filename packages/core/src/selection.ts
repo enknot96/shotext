@@ -1,5 +1,8 @@
 import type { SelectionRect } from "./types";
 
+// 選択枠として扱う最小サイズ（CSS px）。これ未満はOCRせずに終了する
+export const MIN_SELECTION_SIZE = 8;
+
 export function startSelectionOverlay(): Promise<SelectionRect | null> {
   return new Promise((resolve) => {
     // RAMにdivタグを生成
@@ -18,8 +21,9 @@ export function startSelectionOverlay(): Promise<SelectionRect | null> {
     const originalOverflow = document.body.style.overflow;
     // ページ全体のスクロールを禁止
     document.body.style.overflow = "hidden";
-    // bodyタグ直下に上記で設定したdivタグを追加。ブラウザが「新しい要素がDOMツリーに追加された」と認識
-    document.body.appendChild(overlay);
+    // 全画面表示の動画の上でも選択できるよう、全画面中はその要素の下に追加する
+    const container = document.fullscreenElement ?? document.body;
+    container.appendChild(overlay);
 
     // カーソルの見た目を即座に反映させるため、強制的にレイアウト再計算させる
     overlay.offsetHeight;
@@ -83,10 +87,16 @@ export function startSelectionOverlay(): Promise<SelectionRect | null> {
         height: Math.abs(endY - startY),
       };
 
-      // ここでpendingだったPromiseがfullfilledに変わり、中身がrectになり、
-      // await startSelectionOverlay()で待っていた側にデータ=rectが届く
       cleanup();
-      resolve(rect);
+      // オーバーレイの削除が画面に反映されてから撮影させるため、2フレーム待ってから解決する
+      // （撮影に選択枠や暗い幕が写り込むのを防ぐため）
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          // ここでpendingだったPromiseがfullfilledに変わり、中身がrectになり、
+          // await startSelectionOverlay()で待っていた側にデータ=rectが届く
+          resolve(rect);
+        });
+      });
     }
 
     // addEventListenerの削除
