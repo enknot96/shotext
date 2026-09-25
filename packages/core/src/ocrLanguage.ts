@@ -1,5 +1,6 @@
 // ブラウザのUI言語から、Tesseractに渡す認識言語を決める
-// TODO(v1.1-B): 日本語環境以外では英語だけにする。現時点では従来どおり日英の両方
-export function langsForUiLanguage(_uiLanguage: string): string {
-  return "jpn+eng";
+// 日本語環境のユーザーは和文と英文の両方を読むが、それ以外は英語だけで十分。
+// 英語だけにすれば、日本語の学習データ（約2MB）を読み込まずに済む
+export function langsForUiLanguage(uiLanguage: string): string {
+  return uiLanguage.toLowerCase().startsWith("ja") ? "jpn+eng" : "eng";
 }
